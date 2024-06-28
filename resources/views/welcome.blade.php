@@ -1,5 +1,3 @@
-<!-- resources/views/welcome.blade.php -->
-
 <x-guest-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
@@ -12,16 +10,19 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
                     @guest
-                        <p>Please <a href="{{ route('login') }}" class="underline">login</a> to start playing Lingo and see the leaderboard.</p>
+                        <p>Please <a href="{{ route('login') }}" class="underline">login</a> to start playing Lingo and see
+                            the leaderboard.</p>
                     @else
                         <p>Welcome, {{ Auth::user()->name }}!</p>
                         <p>Start playing Lingo now!</p>
-                        <a href="{{ route('lingo') }}" class="bg-blue-200 hover:bg-blue-300 text-blue-800 font-bold py-2 px-4 rounded-lg text-xl">
+                        <a href="{{ route('lingo') }}"
+                            class="bg-blue-200 hover:bg-blue-300 text-blue-800 font-bold py-2 px-4 rounded-lg text-xl">
                             Play Lingo
                         </a>
 
                         <div class="flex justify-center mt-4">
-                            <a href="{{ route('friend') }}" class="bg-blue-200 hover:bg-blue-300 text-blue-800 font-bold py-2 px-4 rounded-lg text-xl">
+                            <a href="{{ route('friend') }}"
+                                class="bg-blue-200 hover:bg-blue-300 text-blue-800 font-bold py-2 px-4 rounded-lg text-xl">
                                 Add a Friend
                             </a>
                         </div>
@@ -56,15 +57,19 @@
                                         <div class="flex justify-between items-center mt-4">
                                             <div>{{ $friendRequest->sender->name }}</div>
                                             <div>
-                                                <form method="POST" action="{{ route('friend.accept', $friendRequest->id) }}">
+                                                <form method="POST" action="{{ route('friend.accept', $friendRequest->id) }}"
+                                                    style="display:inline;">
                                                     @csrf
-                                                    <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                                                    <button type="submit"
+                                                        class="bg-green-500 hover:bg-green-700 text-black font-bold py-2 px-4 rounded">
                                                         Accept
                                                     </button>
                                                 </form>
-                                                <form method="POST" action="{{ route('friend.reject', $friendRequest->id) }}">
+                                                <form method="POST" action="{{ route('friend.reject', $friendRequest->id) }}"
+                                                    style="display:inline;">
                                                     @csrf
-                                                    <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                                                    <button type="submit"
+                                                        class="bg-red-500 hover:bg-red-700 text-black font-bold py-2 px-4 rounded">
                                                         Reject
                                                     </button>
                                                 </form>
@@ -84,15 +89,26 @@
                                             <div>{{ $friend->name }}</div>
                                             <div>
                                                 @if ($friend->isOnline())
-                                                    Online
+                                                    <span class="text-green-500">Online</span>
                                                 @else
-                                                    Last seen {{ $friend->last_seen ? $friend->last_seen->diffForHumans() : 'Never' }}
+                                                    <span class="text-gray-500">offline</span>
                                                 @endif
                                             </div>
                                         </div>
                                     @endforeach
                                 </div>
                             </div>
+                        </div>
+
+                        <!-- Logout Button -->
+                        <div class="flex justify-end mt-4">
+                            <form method="POST" action="{{ route('logout') }}">
+                                @csrf
+                                <button type="submit"
+                                    class="bg-red-500 hover:bg-red-700 text-black font-bold py-2 px-4 rounded">
+                                    Logout
+                                </button>
+                            </form>
                         </div>
                     @endguest
                 </div>

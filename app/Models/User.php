@@ -16,7 +16,9 @@ class User extends Authenticatable
         'name', 'email', 'password', 'last_seen',
     ];
 
-    protected $dates = ['last_seen'];
+    protected $casts = [
+        'last_seen' => 'datetime',
+    ];
 
     public function sentFriendRequests()
     {
