@@ -48,24 +48,23 @@
                             </table>
                         </div>
 
-                        <!-- Pending Friend Requests -->
                         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 mt-8">
                             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                                 <div class="p-6 bg-white border-b border-gray-200">
                                     <h3 class="text-lg font-semibold">Pending Friend Requests</h3>
                                     @foreach (Auth::user()->receivedFriendRequests()->where('status', 'pending')->get() as $friendRequest)
                                         <div class="flex justify-between items-center mt-4">
-                                            <div>{{ $friendRequest->sender->name }} ({{ $friendRequest->sender->email }})</div>
+                                            <div>{{ $friendRequest->sender->name }}</div>
                                             <div>
                                                 <form method="POST" action="{{ route('friend.accept', $friendRequest->id) }}">
                                                     @csrf
-                                                    <button type="submit" class="bg-green-500 hover:bg-green-700 text-black font-bold py-2 px-4 rounded">
+                                                    <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
                                                         Accept
                                                     </button>
                                                 </form>
                                                 <form method="POST" action="{{ route('friend.reject', $friendRequest->id) }}">
                                                     @csrf
-                                                    <button type="submit" class="bg-red-500 hover:bg-red-700 text-black font-bold py-2 px-4 rounded">
+                                                    <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
                                                         Reject
                                                     </button>
                                                 </form>
@@ -76,15 +75,20 @@
                             </div>
                         </div>
 
-                        <!-- Friends List -->
                         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 mt-8">
                             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                                 <div class="p-6 bg-white border-b border-gray-200">
                                     <h3 class="text-lg font-semibold">Friends</h3>
                                     @foreach (Auth::user()->friends as $friend)
                                         <div class="flex justify-between items-center mt-4">
-                                            <div>{{ $friend->name }} ({{ $friend->email }})</div>
-                                            <div>{{ $friend->last_status }}</div>
+                                            <div>{{ $friend->name }}</div>
+                                            <div>
+                                                @if ($friend->isOnline())
+                                                    Online
+                                                @else
+                                                    Last seen {{ $friend->last_seen ? $friend->last_seen->diffForHumans() : 'Never' }}
+                                                @endif
+                                            </div>
                                         </div>
                                     @endforeach
                                 </div>

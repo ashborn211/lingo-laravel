@@ -3,49 +3,21 @@
 namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Carbon\Carbon;
 
 class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
     protected $fillable = [
-        'name',
-        'email',
-        'password',
+        'name', 'email', 'password', 'last_seen',
     ];
 
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
+    protected $dates = ['last_seen'];
 
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
-
-
-
-    /**
-     * Get all friends of this user.
-     */
     public function sentFriendRequests()
     {
         return $this->hasMany(FriendRequest::class, 'sender_id');
@@ -62,7 +34,19 @@ class User extends Authenticatable
             ->withPivot('created_at')
             ->withTimestamps();
     }
+
+    public function isOnline()
+    {
+        return $this->last_seen !== null && $this->last_seen->diffInMinutes(Carbon::now()) <= 5;
+    }
+
+    public function markOnline()
+    {
+        $this->update(['last_seen' => now()]);
+    }
+
+    public function markOffline()
+    {
+        $this->update(['last_seen' => null]);
+    }
 }
-
-
-

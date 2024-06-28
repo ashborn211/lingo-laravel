@@ -8,7 +8,7 @@ use App\Http\Controllers\FriendController;
 
 Route::get('/', [WelcomeController::class, 'index'])->name('welcome');
 
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'update.last_seen'])->group(function () {
     Route::get('/lingo', [LingoController::class, 'index'])->name('lingo');
     Route::post('/guess', [LingoController::class, 'guess'])->name('lingo.guess');
     Route::get('/add-word', [LingoController::class, 'showAddWordForm'])->name('lingo.showAddWordForm');
@@ -28,7 +28,7 @@ Route::middleware(['auth'])->group(function () {
     })->name('friend');
     
     Route::get('/friend', [FriendController::class, 'showAddFriendForm'])->name('friend');
-    Route::post('/send-friend-request', [FriendController::class, 'sendFriendRequest'])->name('send-friend-request');
+    Route::post('/friend/send', [FriendController::class, 'sendFriendRequest'])->name('send-friend-request');
     Route::post('/friend/accept/{id}', [FriendController::class, 'acceptFriendRequest'])->name('friend.accept');
     Route::post('/friend/reject/{id}', [FriendController::class, 'rejectFriendRequest'])->name('friend.reject');
 });

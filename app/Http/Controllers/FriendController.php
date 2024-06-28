@@ -1,7 +1,5 @@
 <?php
 
-// app/Http/Controllers/FriendController.php
-
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -40,8 +38,11 @@ class FriendController extends Controller
             $friendRequest->update(['status' => 'accepted']);
 
             // Add both users to the friends table
-            $friendRequest->sender->friends()->attach($friendRequest->recipient_id);
-            $friendRequest->recipient->friends()->attach($friendRequest->sender_id);
+            $sender = User::find($friendRequest->sender_id);
+            $recipient = User::find($friendRequest->recipient_id);
+
+            $sender->friends()->attach($friendRequest->recipient_id);
+            $recipient->friends()->attach($friendRequest->sender_id);
         }
 
         return redirect()->back()->with('success', 'Friend request accepted!');
