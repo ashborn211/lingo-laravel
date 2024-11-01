@@ -13,6 +13,7 @@ class UpdateLastSeen
         if (Auth::check()) {
             Auth::user()->markOnline();
         }
+        
 
         return $next($request);
     }
